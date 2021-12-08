@@ -534,10 +534,14 @@ int main(){
 		readset = fdset;		// file destriptor that can read
 		
 		//看select()有無出錯，沒出錯的話，readable的fd會存在readset中
-		if(select(maxfd + 1, &readset, NULL, NULL, NULL) == -1){
-			fprintf(stderr, "select() failed\n");
-			break;
-		}
+		if(select(maxfd + 1, &readset, NULL, NULL, NULL) == -1){	//select()是用來查看各socket的狀態(在set中)，比如誰準備好被讀取(我們可對其呼叫read()而不被block)，誰準備好被寫入(我們對其呼叫write()而不被block)，誰發生錯誤
+			fprintf(stderr, "select() failed\n");			//注意，呼叫select()後，select會指出哪些sockets是準備好被讀取，並且修改readset
+			break;							//此時這些readset只包含可被讀取的sockets，因此有需要的話，在呼叫select()前，可先將readset備份
+		}								//select()的第一參數是要檢查的sockets中最大descriptor+1，第二參數是要檢查可讀性的set
+										//第三參數是要檢查可寫性的set，第四參數是要檢查有無異常的set，第五參數是在該時限(timeval結構)沒有發生事件則返回
+										//第五參數設為0(NULL)，則表示在任一事件發生(比如有一個socket可讀了)前，select()會被block住				
+						        			//需要的話，也可以填滿第2~4參數，一次監聽三個事件
+        									//另外，select()回傳0表示在timeout前都沒有事件發生，回傳-1表示錯誤，成功的話會回傳在當前三個sets中的descriptors總數
 		
 		int i = 0;
 		for(i = 0; i <= maxfd; i++){
