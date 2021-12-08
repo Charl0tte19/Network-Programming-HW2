@@ -95,7 +95,8 @@ int main(){
 			break;
 		}
 
-		if(FD_ISSET(sockfd, &readset)){		// if get something from server
+		// if get something from server
+		if(FD_ISSET(sockfd, &readset)){		
 			int len = read(sockfd, buf, BUF_FOR_SERVER);
 			//server斷線
 			if(len<=0)
@@ -140,7 +141,9 @@ int main(){
             fflush(stdout);
 			
 		}
-		else if(FD_ISSET(0, &readset)){			// if get something from user input
+		
+		// if get something from user input
+		if(FD_ISSET(0, &readset)){			
             fgets(line, INPUT_BUF, stdin);
 
 			write(sockfd, line, strlen(line)+1);	// write user input to server
