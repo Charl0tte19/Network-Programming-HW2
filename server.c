@@ -202,7 +202,7 @@ void handle(int fd, char* buffer, int len, AccountInfo* a_info, int a_Count, fd_
 					write(fd, tmp, strlen(tmp)+1);
 					a_info[cur_account_id].status = ONLINE;				
 				}
-				else if(a_info[rid].status == PLAYING){
+				else if(a_info[rid].status == PLAYING || a_info[rid].status == NEXT_OR_NOT || a_info[rid].status == NEXT_TRUE){
 					sprintf(tmp, "Request failed: %s is playing a game now.\n", buffer);
 					write(fd, tmp, strlen(tmp)+1);
 					a_info[cur_account_id].status = ONLINE;					
