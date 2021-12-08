@@ -521,6 +521,7 @@ int main(){
 
 	//最多同時進行16局比賽
 	Game games[MAX_GAME_NUM];
+	memset(games, 0, sizeof(games));
 	int gameId = -1;
 
 	FD_ZERO(&fdset);					//初始化fdset為0
